@@ -8,3 +8,9 @@
 [submodule "modules/jenkins"]
 	path = modules/jenkins
 	url = git://github.com/avereha/puppet-jenkins.git
+[submodule "modules/postgresql"]
+	path = modules/postgresql
+	url = git://github.com/puppetlabs/puppet-postgresql.git
+[submodule "modules/concat"]
+	path = modules/concat
+	url = git://github.com/ripienaar/puppet-concat.git
