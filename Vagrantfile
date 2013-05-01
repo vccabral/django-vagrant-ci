@@ -12,17 +12,11 @@ Vagrant::Config.run do |config|
 
     # config.vm.forward_port 80, 8080
 
-    # Enable provisioning with Puppet stand alone.  Puppet manifests
-    # are contained in a directory path relative to this Vagrantfile.
-    # You will need to create the manifests directory and a manifest in
-    # the file ci.pp in the manifests_path directory.
-
 	config.vm.provision :puppet,
-					    :options => ["--verbose", "--debug"],
+					    :options => ["--verbose"],
 					    :module_path => "modules" do |puppet|
         puppet.manifests_path = "manifests"
         puppet.manifest_file  = "base.pp"
-end
-
+    end
 
 end

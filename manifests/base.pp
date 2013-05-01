@@ -4,3 +4,5 @@ file { '/etc/motd':
   Managed by Puppet.\n"
 }
 
+include jenkins
+
