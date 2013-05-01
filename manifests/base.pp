@@ -6,3 +6,6 @@ file { '/etc/motd':
 
 include jenkins
 
+package { "git":
+  ensure => installed
+}
