@@ -2,6 +2,8 @@
 # Configuration variables
 
 $python_version = '2.4' # other options: '2.5', '3.2'.
+$project_name = 'icecream'
+$virtualenv = "/home/vagrant/virtualenv/$project_name"
 
 # End of configuration variables
 
@@ -40,4 +42,13 @@ class { 'python':
   virtualenv => true,
   gunicorn   => false
 }
+
+python::virtualenv { $virtualenv:
+  ensure       => present,
+  version      => $python_version,
+  systempkgs   => false,
+  distribute   => true
+}
+
+
 
