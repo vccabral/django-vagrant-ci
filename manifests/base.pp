@@ -1,9 +1,10 @@
 
 # Configuration variables
 
-$python_version = '2.4' # other options: '2.5', '3.2'.
+$python_version = 'system' # options: '2.6', '3.2', 'system'.
 $project_name = 'icecream'
 $virtualenv = "/home/vagrant/virtualenv/$project_name"
+$django_version = 'django==1.5' # parameter passed to 'pip install'.
 
 # End of configuration variables
 
@@ -47,8 +48,9 @@ python::virtualenv { $virtualenv:
   ensure       => present,
   version      => $python_version,
   systempkgs   => false,
-  distribute   => true
+  distribute   => false
 }
 
-
-
+python::pip { $django_version:
+  virtualenv => $virtualenv
+}
