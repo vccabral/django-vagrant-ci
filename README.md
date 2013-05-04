@@ -34,7 +34,7 @@ but it is advised to recreate it from the beginning:
     vagrant destroy
     vagrant up
 
-Connectioning
+Connecting
 ====
 Access jenkins via
     http://localhost:8081
