@@ -1,4 +1,3 @@
-
 django-vagrant-ci
 =================
 
@@ -34,6 +33,27 @@ but it is advised to recreate it from the beginning:
 
     vagrant destroy
     vagrant up
+
+Connectioning
+====
+Access jenkins via
+    http://localhost:8081
+
+SSH into the box via
+    vagrant ssh
+
+Connect to the database via
+    *fix me*
+
+Run the django project via
+    . ~/virtualenvironment/$project_name/bin/activate
+    cd *fixme*
+    python manage.py syncdb
+    python manage.py migrate
+    python manage.py runserver 0.0.0.0:8000
+
+Access the web application via
+    http://localhost:8082
 
 Credits
 ===
