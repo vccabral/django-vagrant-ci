@@ -43,11 +43,12 @@ SSH into the box via
     vagrant ssh
 
 Connect to the database via
-    *fix me*
+    psql -h localhost -U icecream
 
 Run the django project via
-    . ~/virtualenvironment/$project_name/bin/activate
-    cd *fixme*
+    . ~/virtualenv/icecream/bin/activate
+    cd ~/icecream
+    pip install -r requirements/local.txt
     python manage.py syncdb
     python manage.py migrate
     python manage.py runserver 0.0.0.0:8000
