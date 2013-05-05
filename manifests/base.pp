@@ -1,4 +1,3 @@
-
 # Configuration variables
 
 # The name of the project.
@@ -72,6 +71,12 @@ exec { 'sudo chown -R vagrant:vagrant /home/vagrant/virtualenv':
   path    => [ '/bin', '/usr/bin' ],
   command => 'sudo chown -R vagrant:vagrant /home/vagrant/virtualenv',
 }
+
+exec { 'bash /vagrant/create_project.sh':
+  path    => ['/bin', '/usr/bin' ],
+  command => 'bash /vagrant/create_project.sh',
+}
+  
 
 if ($postgresql_version != 'system') {
   class { 'postgresql':
