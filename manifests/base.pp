@@ -68,12 +68,9 @@ python::pip { $django_version:
   virtualenv => $virtualenv
 }
 
-file { "/home/vagrant/virtualenv":
-  ensure => directory,
-  owner => "vagrant",
-  group => "vagrant",
-  recurse => true,
-  mode => 0755,
+exec { 'sudo chown -R vagrant:vagrant /home/vagrant/virtualenv':
+  path    => [ '/bin', '/usr/bin' ],
+  command => 'sudo chown -R vagrant:vagrant /home/vagrant/virtualenv',
 }
 
 if ($postgresql_version != 'system') {
