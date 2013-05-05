@@ -52,7 +52,7 @@ Class['apt::update'] -> Class['python::install']
 
 class { 'python':
   version    => $python_version,
-  dev        => false,
+  dev        => true,
   virtualenv => true,
   gunicorn   => false
 }
@@ -60,12 +60,20 @@ class { 'python':
 python::virtualenv { $virtualenv:
   ensure       => present,
   version      => $python_version,
-  systempkgs   => false,
-  distribute   => false
+  systempkgs   => true,
+  distribute   => true
 }
 
 python::pip { $django_version:
   virtualenv => $virtualenv
+}
+
+file { "/home/vagrant/virtualenv":
+  ensure => directory,
+  owner => "vagrant",
+  group => "vagrant",
+  recurse => true,
+  mode => 0755,
 }
 
 if ($postgresql_version != 'system') {
