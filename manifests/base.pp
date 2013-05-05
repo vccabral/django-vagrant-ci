@@ -1,4 +1,3 @@
-
 # Configuration variables
 
 # The name of the project.
@@ -77,6 +76,12 @@ exec { 'bash /vagrant/create_project.sh':
   command => 'bash /vagrant/create_project.sh',
   creates => "/home/vagrant/.created_project",
 }
+
+exec { 'bash /vagrant/create_project.sh':
+  path    => ['/bin', '/usr/bin' ],
+  command => 'bash /vagrant/create_project.sh',
+}
+  
 
 if ($postgresql_version != 'system') {
   class { 'postgresql':
