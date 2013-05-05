@@ -69,8 +69,13 @@ python::pip { $django_version:
 }
 
 exec { 'sudo chown -R vagrant:vagrant /home/vagrant/virtualenv':
-  path    => [ '/bin', '/usr/bin' ],
   command => 'sudo chown -R vagrant:vagrant /home/vagrant/virtualenv',
+  creates => "/home/vagrant/.changed_owner",
+}
+
+exec { 'bash /vagrant/create_project.sh':
+  command => 'bash /vagrant/create_project.sh',
+  creates => "/home/vagrant/.created_project",
 }
 
 if ($postgresql_version != 'system') {
