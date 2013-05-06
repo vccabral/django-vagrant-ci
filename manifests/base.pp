@@ -74,6 +74,7 @@ exec { '/bin/bash /vagrant/create_project.sh > /home/vagrant/out.log':
   path    => ['/bin', '/usr/bin/'],
   user    => 'vagrant',
   creates => "/home/vagrant/.created_project",
+  require => [Class['postgresql::devel'], Postgresql::Db[$postgresql_database]]
 }
 
 if ($postgresql_version != 'system') {
