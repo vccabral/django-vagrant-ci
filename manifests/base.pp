@@ -75,7 +75,7 @@ exec { '/bin/chown -R vagrant:vagrant /home/vagrant/virtualenv':
 ->
 exec { '/bin/bash /vagrant/create_project.sh > /home/vagrant/out.log':
   command => '/bin/bash /vagrant/create_project.sh > /home/vagrant/out.log',
-  path    => '/bin',
+  path    => ['/bin', '/usr/bin/'],
   user    => 'vagrant',
   creates => "/home/vagrant/.created_project",
 }
@@ -104,3 +104,5 @@ postgresql::db { $postgresql_database:
   user     => $postgresql_user,
   password => $postgresql_password
 }
+
+
