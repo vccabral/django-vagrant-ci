@@ -57,22 +57,27 @@ Another way to connect to the database is with this sequence of commands:
     source ~/virtualenv/icecream/bin/activate
     cd ~/icecream
     python icecream/manage.py dbshell
-You can check the database content after the initial `python manage.py syncdb` in the psql shell with the '\d' command:
-
-    \d
 
 Django is installed inside the virtual env, so the virtualenv must be activated before running `django-admin.py`:
 
+    source ~/virtualenv/icecream/bin/activate
     django-admin.py --version
 
 Run the django project via
 
     . ~/virtualenv/icecream/bin/activate
-    cd ~/icecream
+    cd ~/icecream/icecream
     #pip install -r requirements/local.txt
     python manage.py syncdb
     python manage.py migrate
     python manage.py runserver 0.0.0.0:8000
+
+You can check the database content after the initial `python manage.py syncdb` in the psql shell with the '\d' command:
+
+    . ~/virtualenv/icecream/bin/activate
+    cd ~/icecream/icecream
+    python manage.py dbshell
+    \d
 
 Access the web application via
 
