@@ -14,7 +14,7 @@ $python_version = 'system'
 # This is the parameter passed to `pip install`.
 # Example valid values: `django`, `django==1.2.5`.
 # Note that the version of django must be compatible with the version of Python.
-$django_version = 'django==1.5'
+$django_version = 'django==1.5.1'
 
 # Virtualenv location
 $virtualenv = "/home/vagrant/virtualenv/$project_name"
@@ -61,16 +61,12 @@ python::virtualenv { $virtualenv:
   version      => $python_version,
   systempkgs   => true,
   distribute   => true,
+  owner        => 'vagrant'
 }
 ->
 python::pip { $django_version:
-  virtualenv => $virtualenv
-}
-->
-exec { '/bin/chown -R vagrant:vagrant /home/vagrant/virtualenv':
-  command => '/bin/chown -R vagrant:vagrant /home/vagrant/virtualenv',
-  user    => 'root',
-  creates => '/home/vagrant/.owner_changed',
+  virtualenv => $virtualenv,
+  owner      => 'vagrant'
 }
 ->
 exec { '/bin/bash /vagrant/create_project.sh > /home/vagrant/out.log':
