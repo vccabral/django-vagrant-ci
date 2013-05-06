@@ -60,28 +60,25 @@ python::virtualenv { $virtualenv:
   ensure       => present,
   version      => $python_version,
   systempkgs   => true,
-  distribute   => true
+  distribute   => true,
 }
-
+->
 python::pip { $django_version:
   virtualenv => $virtualenv
 }
-
-exec { 'sudo chown -R vagrant:vagrant /home/vagrant/virtualenv':
-  command => 'sudo chown -R vagrant:vagrant /home/vagrant/virtualenv',
-  creates => "/home/vagrant/.changed_owner",
+->
+exec { '/bin/chown -R vagrant:vagrant /home/vagrant/virtualenv':
+  command => '/bin/chown -R vagrant:vagrant /home/vagrant/virtualenv',
+  user    => 'root',
+  creates => '/home/vagrant/.owner_changed',
 }
-
-exec { 'bash /vagrant/create_project.sh':
-  command => 'bash /vagrant/create_project.sh',
+->
+exec { '/bin/bash /vagrant/create_project.sh > /home/vagrant/out.log':
+  command => '/bin/bash /vagrant/create_project.sh > /home/vagrant/out.log',
+  path    => '/bin',
+  user    => 'vagrant',
   creates => "/home/vagrant/.created_project",
 }
-
-exec { 'bash /vagrant/create_project.sh':
-  path    => ['/bin', '/usr/bin' ],
-  command => 'bash /vagrant/create_project.sh',
-}
-  
 
 if ($postgresql_version != 'system') {
   class { 'postgresql':
