@@ -97,6 +97,8 @@ class { 'postgresql::server':
   },
 }
 
+class { 'postgresql::devel': }
+
 postgresql::db { $postgresql_database:
   user     => $postgresql_user,
   password => $postgresql_password
