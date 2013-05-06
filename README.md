@@ -44,14 +44,22 @@ SSH into the box via
 
     vagrant ssh
 
+Activate the virtual env via:
+
+    source ~/virtualenv/icecream/bin/activate
+
 Connect to the database via:
 
     psql -h localhost -U icecream -d icecream
 The user `icecream` has full access to the database `icecream`.
-
-Activate the virtual env via:
+Another way to connect to the database is with this sequence of commands:
 
     source ~/virtualenv/icecream/bin/activate
+    cd ~/icecream
+    python icecream/manage.py dbshell
+You can check the database content after the initial `python manage.py syncdb` in the psql shell with the '\d' command:
+
+    \d
 
 Django is installed inside the virtual env, so the virtualenv must be activated before running `django-admin.py`:
 
