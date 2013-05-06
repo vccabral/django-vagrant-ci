@@ -69,8 +69,8 @@ python::pip { $django_version:
   owner      => 'vagrant'
 }
 ->
-exec { '/bin/bash /vagrant/create_project.sh > /home/vagrant/out.log':
-  command => '/bin/bash /vagrant/create_project.sh > /home/vagrant/out.log',
+exec { 'create_project':
+  command => '/bin/bash /vagrant/create_project.sh 2>&1 > /home/vagrant/out.log',
   path    => ['/bin', '/usr/bin/'],
   user    => 'vagrant',
   creates => "/home/vagrant/.created_project",
