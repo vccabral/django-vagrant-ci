@@ -28,11 +28,17 @@ $postgresql_database = $project_name
 $postgresql_user = $project_name
 $postgresql_password = 'Password'
 
+$ci_root = "/home/vagrant/ci"
+$project_path = "${ci_root}/${project_name}"
+$template = "https://github.com/vccabral/django-twoscoops-project/zipball/master"
+$requirements_file = "$project_path/requirements/local.txt"
+$owner = 'vagrant'
+
 # End of configuration variables
 
 file { '/etc/motd':
   content => "Welcome to django-vagrant-ci virtual machine!
-              Managed by Puppet.\n"
+              Managed by Puppet. $owner\n"
 }
 
 include jenkins
@@ -61,20 +67,12 @@ python::virtualenv { $virtualenv:
   version      => $python_version,
   systempkgs   => true,
   distribute   => true,
-  owner        => 'vagrant'
+  owner        => $owner
 }
 ->
 python::pip { $django_version:
   virtualenv => $virtualenv,
-  owner      => 'vagrant'
-}
-->
-exec { 'create_project':
-  command => '/bin/bash /vagrant/create_project.sh 2>&1 > /home/vagrant/out.log',
-  path    => ['/bin', '/usr/bin/'],
-  user    => 'vagrant',
-  creates => "/home/vagrant/.created_project",
-  require => [Class['postgresql::devel'], Postgresql::Db[$postgresql_database]]
+  owner      => $owner
 }
 
 if ($postgresql_version != 'system') {
@@ -103,3 +101,50 @@ postgresql::db { $postgresql_database:
 }
 
 
+file { $ci_root:
+  ensure  => directory,
+  owner   => $owner,
+}
+
+file { $project_path:
+  ensure  => directory,
+  owner   => $owner,
+  require => File[$ci_root]
+}
+
+$manage_py = "$project_path/$project_name/manage.py"
+
+exec { "create_project_$project_path":
+  command => "${virtualenv}/bin/django-admin.py startproject --template=${template} --extension=py,rst,html $project_name $project_path",
+  creates => "$project_path/$project_name",
+  cwd     => $ci_root,
+  require => File[$project_path],
+  user    => $owner
+}
+
+python::requirements { $requirements_file:
+  virtualenv => $virtualenv,
+  owner      => $owner,
+  require    => Exec["create_project_$project_path"]
+}
+
+exec { "setup_project_$project_path":
+  command     => "${virtualenv}/bin/python $manage_py syncdb --noinput\
+  && ${virtualenv}/bin/python $manage_py migrate\
+  && touch ${project_path}/.project_synced",
+  cwd         => "$project_path",
+  creates     => "$project_path/.project_synced",
+  user        => $owner,
+  require     => Python::Requirements[$requirements_file]
+}
+/*
+exec { "git_init_$project_path":
+  command     => "/usr/bin/git init \
+  && /usr/bin/git add -A \
+  && /usr/bin/git commit -m 'Initial commit'",
+  cwd         => $project_path,
+  creates     => "$project_path/.git",
+  user        => $owner,
+  require     => Exec["create_project_$project_path"]
+}
+*/
