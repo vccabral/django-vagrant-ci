@@ -37,23 +37,37 @@ but it is advised to recreate it from the beginning:
 Connecting
 ====
 Access jenkins via
+
     http://localhost:8081
 
 SSH into the box via
+
     vagrant ssh
 
-Connect to the database via
-    psql -h localhost -U icecream
+Connect to the database via:
+
+    psql -h localhost -U icecream -d icecream
+The user `icecream` has full access to the database `icecream`.
+
+Activate the virtual env via:
+
+    source ~/virtualenv/icecream/bin/activate
+
+Django is installed inside the virtual env, so the virtualenv must be activated before running `django-admin.py`:
+
+    django-admin.py --version
 
 Run the django project via
+
     . ~/virtualenv/icecream/bin/activate
     cd ~/icecream
-    pip install -r requirements/local.txt
+    #pip install -r requirements/local.txt
     python manage.py syncdb
     python manage.py migrate
     python manage.py runserver 0.0.0.0:8000
 
 Access the web application via
+
     http://localhost:8082
 
 Credits
