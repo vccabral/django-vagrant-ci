@@ -8,7 +8,7 @@ Getting started
 
 This project uses git submodules. After cloning it, the submodules must be cloned too:
 
-    git clone git://github.com/vccabral/django-base-template.git
+    git clone git://github.com:vccabral/django-vagrant-ci.git
     git submodule update --init
 
 or
