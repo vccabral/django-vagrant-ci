@@ -137,14 +137,17 @@ exec { "setup_project_$project_path":
   user        => $owner,
   require     => Python::Requirements[$requirements_file]
 }
-/*
+
 exec { "git_init_$project_path":
-  command     => "/usr/bin/git init \
+  command     => "/usr/bin/git config --global user.email 'vagrant@cibox'\
+  && /usr/bin/git config --global user.name 'Vagrant'\
+  && /usr/bin/git init \
   && /usr/bin/git add -A \
   && /usr/bin/git commit -m 'Initial commit'",
-  cwd         => $project_path,
+  cwd         => "$project_path",
   creates     => "$project_path/.git",
   user        => $owner,
+  environment => ["USER=${owner}", "HOME=/home/${owner}"],
   require     => Exec["create_project_$project_path"]
 }
-*/
+

@@ -76,7 +76,7 @@ You can check the database content after the initial `python manage.py syncdb` i
 
     . ~/virtualenv/icecream/bin/activate
     cd ~/icecream/icecream
-    
+
     python manage.py dbshell
     \d
 
@@ -87,15 +87,14 @@ Access the web application via
 
 TODO
 ===
-    Create git repo for the newly created project.
     Add jenkins plugins needed for django continuous integration.
     jenkins::plugin {
         "git" : ;
     }
     ...
     Add a jenkins project that polls the local git repo every 10 minutes. The project_name should be $project_name.
-    The build process should run unit tests, code coverage, PEP8 analysis, have a post build process that, on success, makes the project publically available on 8083. 
-    Other items should be, database syncing, database migrations, collecting static content, deploying latest code. 
+    The build process should run unit tests, code coverage, PEP8 analysis, have a post build process that, on success, makes the project publically available on 8083.
+    Other items should be, database syncing, database migrations, collecting static content, deploying latest code.
 
 Credits
 ===
