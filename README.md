@@ -87,11 +87,7 @@ Access the web application via
 
 TODO
 ===
-    Add jenkins plugins needed for django continuous integration.
-    jenkins::plugin {
-        "git" : ;
-    }
-    ...
+    Check all puppet dependencies!
     Add a jenkins project that polls the local git repo every 10 minutes. The project_name should be $project_name.
     The build process should run unit tests, code coverage, PEP8 analysis, have a post build process that, on success, makes the project publically available on 8083.
     Other items should be, database syncing, database migrations, collecting static content, deploying latest code.

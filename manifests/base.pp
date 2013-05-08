@@ -43,6 +43,13 @@ file { '/etc/motd':
 
 include jenkins
 
+jenkins::plugin { [
+  "git",
+  "git-client",
+  "shiningpanda",
+  "violations",
+  "cobertura"] : }
+
 package { "git":
   ensure => installed
 }
@@ -69,8 +76,13 @@ python::virtualenv { $virtualenv:
   distribute   => true,
   owner        => $owner
 }
-->
+
 python::pip { $django_version:
+  virtualenv => $virtualenv,
+  owner      => $owner
+}
+
+python::pip { [ 'django-jenkins', 'coverage', 'pylint']:
   virtualenv => $virtualenv,
   owner      => $owner
 }
@@ -99,7 +111,6 @@ postgresql::db { $postgresql_database:
   user     => $postgresql_user,
   password => $postgresql_password
 }
-
 
 file { $ci_root:
   ensure  => directory,
@@ -151,3 +162,17 @@ exec { "git_init_$project_path":
   require     => Exec["create_project_$project_path"]
 }
 
+ci::jenkins_main_project{ $project_name:
+  project_git_url => "file://$project_path"
+}
+
+ci::jenkins_deploy_project{ $project_name: }
+
+# hack for the git plugin
+exec { "jenkins_git_hack":
+  user        => jenkins,
+  environment => "HOME=/var/lib/jenkins",
+  require     => Package['jenkins'],
+  command     => "/usr/bin/git config --global user.email 'jenkins@cibox'\
+  && /usr/bin/git config --global user.name 'Jenkins'"
+}
