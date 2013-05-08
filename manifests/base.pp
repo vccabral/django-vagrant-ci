@@ -68,7 +68,7 @@ class { 'python':
   virtualenv => true,
   gunicorn   => false
 }
-
+->
 python::virtualenv { $virtualenv:
   ensure       => present,
   version      => $python_version,
@@ -77,14 +77,10 @@ python::virtualenv { $virtualenv:
   owner        => $owner
 }
 
-python::pip { $django_version:
+python::pip { [$django_version, 'django-jenkins', 'coverage', 'pylint']:
   virtualenv => $virtualenv,
-  owner      => $owner
-}
-
-python::pip { [ 'django-jenkins', 'coverage', 'pylint']:
-  virtualenv => $virtualenv,
-  owner      => $owner
+  owner      => $owner,
+  require    => Python::Virtualenv[$virtualenv]
 }
 
 if ($postgresql_version != 'system') {
@@ -112,6 +108,7 @@ postgresql::db { $postgresql_database:
   password => $postgresql_password
 }
 
+
 file { $ci_root:
   ensure  => directory,
   owner   => $owner,
@@ -129,7 +126,7 @@ exec { "create_project_$project_path":
   command => "${virtualenv}/bin/django-admin.py startproject --template=${template} --extension=py,rst,html $project_name $project_path",
   creates => "$project_path/$project_name",
   cwd     => $ci_root,
-  require => File[$project_path],
+  require => [File[$project_path], Python::Pip[$django_version]],
   user    => $owner
 }
 
@@ -146,7 +143,7 @@ exec { "setup_project_$project_path":
   cwd         => "$project_path",
   creates     => "$project_path/.project_synced",
   user        => $owner,
-  require     => Python::Requirements[$requirements_file]
+  require     => [ Python::Requirements[$requirements_file], Postgresql::Db[$postgresql_database]]
 }
 
 exec { "git_init_$project_path":
@@ -159,20 +156,25 @@ exec { "git_init_$project_path":
   creates     => "$project_path/.git",
   user        => $owner,
   environment => ["USER=${owner}", "HOME=/home/${owner}"],
-  require     => Exec["create_project_$project_path"]
+  require     => [Exec["create_project_$project_path"], Package['git']]
 }
 
 ci::jenkins_main_project{ $project_name:
-  project_git_url => "file://$project_path"
+  project_git_url => "file://$project_path",
+  require         => Package['jenkins']
 }
 
-ci::jenkins_deploy_project{ $project_name: }
+ci::jenkins_deploy_project{ $project_name:
+  require => Package['jenkins']
+}
 
-# hack for the git plugin
+# hack for the git plugin:
+# https://wiki.jenkins-ci.org/display/JENKINS/Git+Plugin
 exec { "jenkins_git_hack":
   user        => jenkins,
   environment => "HOME=/var/lib/jenkins",
-  require     => Package['jenkins'],
+  require     => [ Package['jenkins'], Package['git']],
   command     => "/usr/bin/git config --global user.email 'jenkins@cibox'\
-  && /usr/bin/git config --global user.name 'Jenkins'"
+  && /usr/bin/git config --global user.name 'Jenkins'",
+  before      => Ci::Jenkins_main_project[$project_name]
 }
