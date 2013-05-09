@@ -178,7 +178,10 @@ file { '/var/lib/jenkins/jobs':
 
 ci::jenkins_main_project{ $project_name:
   project_git_url => "file://$project_path",
-  require         => [ File['/var/lib/jenkins/jobs'], Exec["git_init_$project_path"]]
+  require         => [ File['/var/lib/jenkins/jobs'],
+    Exec["git_init_$project_path"],
+    Exec["setup_project_${project_path}"]
+  ]
 }
 
 ci::jenkins_deploy_project{ $project_name:
