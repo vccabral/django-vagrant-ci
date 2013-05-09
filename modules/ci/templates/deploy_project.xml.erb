@@ -19,13 +19,10 @@ then
 git clone &quot;$JENKINS_HOME/jobs/<%= project_name %>/workspace&quot; <%= project_name %>
 fi
 cd <%= project_name %>
-git pull origin master
+git pull origin HEAD
 if [ ! -f &apos;.project_synced_live&apos; ]
 then
 DJANGO_SETTINGS_MODULE=<%= project_name %>.settings.live  /home/vagrant/virtualenv/<%= project_name %>/bin/python <%= project_name %>/manage.py syncdb --noinput
-# commit the new secret key hack
-git add -A
-git commit -m "secret key changed"
 touch .project_synced_live
 fi
 DJANGO_SETTINGS_MODULE=<%= project_name %>.settings.live  /home/vagrant/virtualenv/<%= project_name %>/bin/python <%= project_name %>/manage.py migrate

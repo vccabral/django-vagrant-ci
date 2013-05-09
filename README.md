@@ -90,7 +90,7 @@ You can check the live database content after the initial `python manage.py sync
 
     . ~/virtualenv/icecream/bin/activate
     cd ~/live/icecream
-    export DJANGO_SETTINGS_MODULE=<%= project_name %>.settings.live
+    export DJANGO_SETTINGS_MODULE=icecream.settings.live
     python manage.py dbshell
     \d
 
