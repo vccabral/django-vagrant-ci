@@ -24,6 +24,8 @@ $postgresql_version = 'system'
 
 # Name of the database
 $postgresql_database = $project_name
+$postgresql_live_database = "live_${project_name}"
+
 # User that will have full access to database
 $postgresql_user = $project_name
 $postgresql_password = 'Password'
@@ -103,11 +105,17 @@ class { 'postgresql::server':
 
 class { 'postgresql::devel': }
 
-postgresql::db { $postgresql_database:
+postgresql::db { [
+  $postgresql_database,
+  $postgresql_live_database
+  ]:
   user     => $postgresql_user,
   password => $postgresql_password
 }
 
+Postgresql::Role <| title == $postgresql_user |>{
+  createdb => true
+}
 
 file { $ci_root:
   ensure  => directory,
