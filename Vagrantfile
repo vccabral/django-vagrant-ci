@@ -6,7 +6,7 @@ Vagrant::Config.run do |config|
 
     config.vm.box_url = "http://cloud-images.ubuntu.com/precise/current/precise-server-cloudimg-vagrant-amd64-disk1.box"
 
-    config.vm.customize ["modifyvm", :id, "--memory", 1024]
+    config.vm.customize ["modifyvm", :id, "--memory", 2048]
 
     config.vm.network :hostonly, "192.168.33.10"
     config.vm.forward_port 8080, 8081
