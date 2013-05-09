@@ -159,22 +159,44 @@ exec { "git_init_$project_path":
   require     => [Exec["create_project_$project_path"], Package['git']]
 }
 
+file { '/var/lib/jenkins/jobs':
+  require => Package['jenkins'],
+  ensure  => directory,
+  owner   => jenkins,
+  group   => jenkins,
+  mode    => 0755
+}
+
 ci::jenkins_main_project{ $project_name:
   project_git_url => "file://$project_path",
-  require         => Package['jenkins']
+  require         => File['/var/lib/jenkins/jobs']
 }
 
 ci::jenkins_deploy_project{ $project_name:
-  require => Package['jenkins']
+  require => File['/var/lib/jenkins/jobs']
 }
 
 # hack for the git plugin:
 # https://wiki.jenkins-ci.org/display/JENKINS/Git+Plugin
 exec { "jenkins_git_hack":
   user        => jenkins,
-  environment => "HOME=/var/lib/jenkins",
+  environment => "HOME=/home/jenkins",
+  creates     => "/home/jenkins/.gitconfig",
   require     => [ Package['jenkins'], Package['git']],
   command     => "/usr/bin/git config --global user.email 'jenkins@cibox'\
   && /usr/bin/git config --global user.name 'Jenkins'",
-  before      => Ci::Jenkins_main_project[$project_name]
+  before      => Ci::Jenkins_main_project[$project_name],
+  notify      => Service['jenkins']
+}
+
+file { '/home/vagrant/live':
+  ensure => directory,
+  owner  => jenkins,
+  mode   => 0777
+}
+
+file { '/home/jenkins':
+  ensure => directory,
+  owner  => jenkins,
+  before => Exec['jenkins_git_hack']
 }
