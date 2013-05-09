@@ -76,7 +76,7 @@ Run the django project via
 You can check the database content after the initial `python manage.py syncdb` in the psql shell with the '\d' command:
 
     . ~/virtualenv/icecream/bin/activate
-    cd ~/icecream/icecream
+    cd ~/ci/icecream/icecream
 
     python manage.py dbshell
     \d
@@ -107,7 +107,6 @@ Access the "live" web application via
 
 TODO
 ===
-    - testing
     - on success, makes the project publically available on 8083.
     Other items should be collecting static content, deploying latest code.
 
