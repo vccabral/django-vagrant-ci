@@ -20,6 +20,12 @@ git clone &quot;$JENKINS_HOME/jobs/<%= project_name %>/workspace&quot; <%= proje
 fi
 cd <%= project_name %>
 git pull origin master
+if [ ! -f &apos;.project_synced&apos; ]
+then
+DJANGO_SETTINGS_MODULE=<%= project_name %>.settings.live  /home/vagrant/virtualenv/<%= project_name %>/bin/python <%= project_name %>/manage.py syncdb --noinput
+touch .project_synced
+DJANGO_SETTINGS_MODULE=<%= project_name %>.settings.live  /home/vagrant/virtualenv/<%= project_name %>/bin/python <%= project_name %>/manage.py migrate
+fi
 </command>
     </hudson.tasks.Shell>
   </builders>

@@ -11,6 +11,7 @@ Vagrant::Config.run do |config|
     config.vm.network :hostonly, "192.168.33.10"
     config.vm.forward_port 8080, 8081
     config.vm.forward_port 8000, 8082
+    config.vm.forward_port 8001, 8083
 
     # config.vm.network :bridged
 

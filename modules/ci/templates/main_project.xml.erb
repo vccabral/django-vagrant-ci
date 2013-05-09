@@ -54,7 +54,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-        <command>/home/vagrant/virtualenv/<%= project_name %>/bin/python $WORKSPACE/<%= project_name %>/manage.py jenkins
+        <command>DJANGO_SETTINGS_MODULE=<%= project_name %>.settings.jenkins /home/vagrant/virtualenv/<%= project_name %>/bin/python $WORKSPACE/<%= project_name %>/manage.py jenkins
        </command>
     </hudson.tasks.Shell>
   </builders>

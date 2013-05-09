@@ -30,6 +30,7 @@ $postgresql_live_database = "live_${project_name}"
 $postgresql_user = $project_name
 $postgresql_password = 'Password'
 
+$live_location = '/home/vagrant/live'
 $ci_root = "/home/vagrant/ci"
 $project_path = "${ci_root}/${project_name}"
 $template = "https://github.com/vccabral/django-twoscoops-project/zipball/master"
@@ -197,7 +198,7 @@ exec { "jenkins_git_hack":
   notify      => Service['jenkins']
 }
 
-file { '/home/vagrant/live':
+file { $live_location:
   ensure => directory,
   owner  => jenkins,
   mode   => 0777
