@@ -51,6 +51,10 @@ Activate the virtual env via:
 Connect to the database via:
 
     psql -h localhost -U icecream -d icecream
+Connect to the 'live' database via:
+
+    psql -h localhost -U icecream -d live_icecream
+
 The user `icecream` has full access to the database `icecream`.
 Another way to connect to the database is with this sequence of commands:
 
@@ -66,10 +70,7 @@ Django is installed inside the virtual env, so the virtualenv must be activated 
 Run the django project via
 
     . ~/virtualenv/icecream/bin/activate
-    cd ~/icecream/icecream
-    #pip install -r requirements/local.txt
-    python manage.py syncdb
-    python manage.py migrate
+    cd ~/ci/icecream/icecream
     python manage.py runserver 0.0.0.0:8000
 
 You can check the database content after the initial `python manage.py syncdb` in the psql shell with the '\d' command:
@@ -85,12 +86,30 @@ Access the web application via
     http://localhost:8082
 
 
+You can check the live database content after the initial `python manage.py syncdb` in the psql shell with the '\d' command:
+
+    . ~/virtualenv/icecream/bin/activate
+    cd ~/live/icecream
+    export DJANGO_SETTINGS_MODULE=<%= project_name %>.settings.live
+    python manage.py dbshell
+    \d
+
+Run the "live" web application:
+
+    . ~/virtualenv/icecream/bin/activate
+    cd ~/live/icecream/
+    python manage.py runserver 0.0.0.0:8001
+
+Access the "live" web application via
+
+    http://localhost:8083
+
+
 TODO
 ===
-    - add django-jenkins app to the django-twoscoops-project template
     - testing
-    The build process should run unit tests, code coverage, PEP8 analysis, have a post build process that, on success, makes the project publically available on 8083.
-    Other items should be, database syncing, database migrations, collecting static content, deploying latest code.
+    - on success, makes the project publically available on 8083.
+    Other items should be collecting static content, deploying latest code.
 
 Credits
 ===
