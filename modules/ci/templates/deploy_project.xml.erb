@@ -20,12 +20,15 @@ git clone &quot;$JENKINS_HOME/jobs/<%= project_name %>/workspace&quot; <%= proje
 fi
 cd <%= project_name %>
 git pull origin master
-if [ ! -f &apos;.project_synced&apos; ]
+if [ ! -f &apos;.project_synced_live&apos; ]
 then
 DJANGO_SETTINGS_MODULE=<%= project_name %>.settings.live  /home/vagrant/virtualenv/<%= project_name %>/bin/python <%= project_name %>/manage.py syncdb --noinput
-touch .project_synced
-DJANGO_SETTINGS_MODULE=<%= project_name %>.settings.live  /home/vagrant/virtualenv/<%= project_name %>/bin/python <%= project_name %>/manage.py migrate
+# commit the new secret key hack
+git add -A
+git commit -m "secret key changed"
+touch .project_synced_live
 fi
+DJANGO_SETTINGS_MODULE=<%= project_name %>.settings.live  /home/vagrant/virtualenv/<%= project_name %>/bin/python <%= project_name %>/manage.py migrate
 </command>
     </hudson.tasks.Shell>
   </builders>
