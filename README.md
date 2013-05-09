@@ -97,7 +97,7 @@ You can check the live database content after the initial `python manage.py sync
 Run the "live" web application:
 
     . ~/virtualenv/icecream/bin/activate
-    cd ~/live/icecream/
+    cd ~/live/icecream/icecream
     python manage.py runserver 0.0.0.0:8001
 
 Access the "live" web application via
